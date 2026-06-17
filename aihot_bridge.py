@@ -22,7 +22,9 @@ from urllib.error import HTTPError, URLError
 
 API_BASE = "https://aihot.virxact.com"
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 aihot-skill/0.2.0"
-NEWS_JSON_PATH = os.path.join(os.path.dirname(__file__), "website", "data", "news.json")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "website", "data")
+NEWS_JSON_PATH = os.path.join(DATA_DIR, "news.json")
+DAILY_JSON_PATH = os.path.join(DATA_DIR, "daily.json")
 
 # AI HOT category → 龙虾新闻 category
 CATEGORY_MAP = {
@@ -204,11 +206,63 @@ def save_news(news_list):
         json.dump(news_list, f, ensure_ascii=False, indent=2)
     print(f"💾 已写入 {len(news_list)} 条新闻 → {NEWS_JSON_PATH}")
 
+def fetch_and_save_daily(date_str=None):
+    """Fetch daily report and save as structured daily.json."""
+    if date_str:
+        result = api_get(f"/api/public/daily/{date_str}")
+    else:
+        result = api_get("/api/public/daily")
+    if not result:
+        print("  ⚠️ 日报数据获取失败")
+        return False
+
+    # Build the daily report in a display-friendly format
+    daily = {
+        "date": result.get("date", ""),
+        "generatedAt": result.get("generatedAt", ""),
+        "lead": result.get("lead"),
+        "sections": [],
+        "flashes": result.get("flashes", []),
+    }
+
+    # Map section labels to Chinese and add icons
+    section_icons = {
+        "模型发布/更新": "🧠",
+        "产品发布/更新": "🚀",
+        "行业动态": "📊",
+        "论文研究": "📄",
+        "技巧与观点": "💡",
+    }
+
+    for section in result.get("sections", []):
+        label = section.get("label", "")
+        items = []
+        for item in section.get("items", []):
+            items.append({
+                "title": item.get("title", ""),
+                "summary": item.get("summary", ""),
+                "sourceUrl": item.get("sourceUrl", ""),
+                "sourceName": item.get("sourceName", ""),
+                "publishedAt": item.get("publishedAt", ""),
+            })
+        daily["sections"].append({
+            "icon": section_icons.get(label, "📌"),
+            "label": label,
+            "items": items,
+        })
+
+    os.makedirs(DATA_DIR, exist_ok=True)
+    with open(DAILY_JSON_PATH, "w") as f:
+        json.dump(daily, f, ensure_ascii=False, indent=2)
+    total = sum(len(s["items"]) for s in daily["sections"]) + len(daily["flashes"])
+    print(f"📋 日报已保存: {daily['date']}, {len(daily['sections'])} 个版块, {total} 条")
+    return True
+
 def git_publish(commit_msg="publish: AI HOT 自动同步新闻"):
-    """Commit and push news.json."""
+    """Commit and push news.json and daily.json."""
     project_dir = os.path.dirname(os.path.abspath(__file__))
     try:
-        subprocess.run(["git", "-C", project_dir, "add", "website/data/news.json"], check=True)
+        subprocess.run(["git", "-C", project_dir, "add", "website/data/news.json", "website/data/daily.json"], check=True)
         subprocess.run(["git", "-C", project_dir, "commit", "-m", commit_msg], check=True)
         subprocess.run(["git", "-C", project_dir, "push"], check=True)
         print(f"🚀 已提交并推送: {commit_msg}")
@@ -231,9 +285,15 @@ def main():
                         help="拉取后自动 git commit + push")
     parser.add_argument("--replace", action="store_true",
                         help="完全替换 news.json (默认: 保留旧条目，去重合并)")
+    parser.add_argument("--save-daily", action="store_true",
+                        help="同时拉取并保存日报到 daily.json")
     args = parser.parse_args()
 
-    # Fetch
+    # Fetch daily report if requested
+    if args.save_daily:
+        fetch_and_save_daily(args.daily_date)
+
+    # Fetch items
     if args.daily or args.daily_date:
         raw_items = fetch_daily(args.daily_date)
         new_news = [daily_item_to_news(i) for i in raw_items]

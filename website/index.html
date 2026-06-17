@@ -373,6 +373,108 @@
             color: var(--text-muted);
         }
 
+        /* ═══ 日报视图 ═══ */
+        .daily-view { padding: 0.5rem 0; }
+
+        .daily-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .daily-title { font-size: 1.4rem; font-weight: 700; color: var(--text); }
+
+        .daily-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .daily-lead {
+            background: var(--accent-light);
+            border-left: 3px solid var(--accent);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1.5rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .daily-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .daily-section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .daily-item {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .daily-item:last-child { border-bottom: none; }
+
+        .daily-item-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.2rem;
+        }
+
+        .daily-item-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .daily-item-title a:hover { color: var(--accent); }
+
+        .daily-item-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .daily-item-summary {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            line-height: 1.6;
+        }
+
+        .daily-flashes {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px dashed var(--border);
+        }
+
+        .daily-flashes-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--hot);
+            margin-bottom: 0.5rem;
+        }
+
+        .daily-flash {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            padding: 0.3rem 0;
+        }
+
+        .daily-flash a { color: var(--accent); text-decoration: none; }
+        .daily-flash a:hover { text-decoration: underline; }
+
+        .daily-empty {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+        }
+
         /* 时间线信息流 */
         .timeline {
             position: relative;
@@ -612,6 +714,10 @@
                         <span>精选</span>
                         <span class="count" id="count-all">0</span>
                     </div>
+                    <div class="nav-item" data-view="daily">
+                        <span class="nav-icon">📰</span>
+                        <span>日报</span>
+                    </div>
                     <div class="nav-item" data-filter="全部">
                         <span class="nav-icon">📰</span>
                         <span>全部动态</span>
@@ -685,6 +791,17 @@
                 </div>
                 <div class="hot-top3" id="hot-top3"></div>
                 <ol class="hot-list" id="hot-list"></ol>
+            </div>
+
+            <!-- 日报视图 -->
+            <div class="daily-view" id="daily-view" style="display:none;">
+                <div class="daily-header">
+                    <h2 class="daily-title">📰 AI 日报</h2>
+                    <span class="daily-date" id="daily-date"></span>
+                </div>
+                <div class="daily-lead" id="daily-lead"></div>
+                <div class="daily-sections" id="daily-sections"></div>
+                <div class="daily-flashes" id="daily-flashes"></div>
             </div>
 
             <!-- 时间线信息流 -->
@@ -877,11 +994,96 @@
             btn.textContent = item.classList.contains('expanded') ? '收起' : '展开全文';
         }
 
-        // 导航筛选
+        // 日报视图
+        async function loadDaily() {
+            try {
+                const resp = await fetch('./data/daily.json?v=' + Date.now());
+                const daily = await resp.json();
+                renderDaily(daily);
+            } catch (e) {
+                document.getElementById('daily-sections').innerHTML = `
+                    <div class="daily-empty">
+                        <div style="font-size:2rem;">📭</div>
+                        <p>日报数据尚未生成</p>
+                        <p style="font-size:0.75rem;">运行 python3 aihot_bridge.py --save-daily 拉取</p>
+                    </div>`;
+            }
+        }
+
+        function renderDaily(daily) {
+            document.getElementById('daily-date').textContent = daily.date || '';
+            // Lead
+            if (daily.lead) {
+                document.getElementById('daily-lead').innerHTML = `
+                    <strong>${daily.lead.title || ''}</strong>
+                    ${daily.lead.leadParagraph ? '<br>' + daily.lead.leadParagraph : ''}`;
+            } else {
+                document.getElementById('daily-lead').style.display = 'none';
+            }
+            // Sections
+            let sectionsHtml = '';
+            let globalIdx = 0;
+            (daily.sections || []).forEach(section => {
+                sectionsHtml += `<div class="daily-section">
+                    <div class="daily-section-title">${section.icon} ${section.label}</div>`;
+                (section.items || []).forEach(item => {
+                    globalIdx++;
+                    const titleHtml = item.sourceUrl
+                        ? `<a href="${item.sourceUrl}" target="_blank" rel="noopener">${globalIdx}. ${item.title}</a>`
+                        : `${globalIdx}. ${item.title}`;
+                    sectionsHtml += `<div class="daily-item">
+                        <div class="daily-item-title">${titleHtml}</div>
+                        <div class="daily-item-meta">${item.sourceName || ''}</div>
+                        ${item.summary ? `<div class="daily-item-summary">${item.summary}</div>` : ''}
+                    </div>`;
+                });
+                sectionsHtml += '</div>';
+            });
+            document.getElementById('daily-sections').innerHTML = sectionsHtml;
+            // Flashes
+            if (daily.flashes && daily.flashes.length > 0) {
+                let flashesHtml = '<div class="daily-flashes-title">⚡ 快讯</div>';
+                daily.flashes.forEach(f => {
+                    flashesHtml += `<div class="daily-flash">
+                        ${f.sourceUrl ? `<a href="${f.sourceUrl}" target="_blank" rel="noopener">${f.title}</a>` : f.title}
+                        <span style="font-size:0.65rem;color:var(--text-muted)"> — ${f.sourceName || ''}</span>
+                    </div>`;
+                });
+                document.getElementById('daily-flashes').innerHTML = flashesHtml;
+                document.getElementById('daily-flashes').style.display = 'block';
+            } else {
+                document.getElementById('daily-flashes').style.display = 'none';
+            }
+        }
+
+        function showView(view) {
+            const timeline = document.getElementById('timeline');
+            const hot = document.getElementById('hot-section');
+            const daily = document.getElementById('daily-view');
+            const title = document.getElementById('page-title');
+            const subtitle = document.getElementById('page-subtitle');
+            if (view === 'daily') {
+                timeline.style.display = 'none';
+                hot.style.display = 'none';
+                daily.style.display = 'block';
+                title.textContent = 'AI 日报';
+                subtitle.textContent = 'AI HOT 每日精选，北京时间 08:00 更新';
+                loadDaily();
+            } else {
+                timeline.style.display = 'block';
+                hot.style.display = 'block';
+                daily.style.display = 'none';
+                title.textContent = '精选';
+                subtitle.textContent = 'AI 领域最新资讯，由 AI HOT 自动同步';
+            }
+        }
+
+        // 导航切换
         document.querySelectorAll('.nav-item[data-filter]').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 item.classList.add('active');
+                showView('timeline');
 
                 const filter = item.dataset.filter;
                 currentFilter = filter;
@@ -895,6 +1097,13 @@
                     document.getElementById('page-title').textContent = filter;
                 }
             });
+        });
+
+        // 日报导航
+        document.querySelector('.nav-item[data-view="daily"]').addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            this.classList.add('active');
+            showView('daily');
         });
 
         loadNews();

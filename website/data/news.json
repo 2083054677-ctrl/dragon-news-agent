@@ -1,5 +1,17 @@
 [
   {
+    "id": "news-20260617-7660186a",
+    "title": "Strands Robots SDK：用单一智能体打通 Hugging Face Hub 到物理机器人",
+    "author": "Hugging Face：Blog（RSS）",
+    "date": "2026-06-17",
+    "summary": "AWS（Apache 2.0）开源的 Strands Robots SDK 将 LeRobot 栈封装为 AgentTools，构建统一智能体。默认用 MuJoCo 模拟（无需硬件），mode=\"real\" 切换至真实机器人。可记录演示数据",
+    "content": "AWS（Apache 2.0）开源的 Strands Robots SDK 将 LeRobot 栈封装为 AgentTools，构建统一智能体。默认用 MuJoCo 模拟（无需硬件），mode=\"real\" 切换至真实机器人。可记录演示数据为 LeRobotDataset 并推送 Hugging Face Hub，运行 GR00T 或 LerobotLocal 策略推理，经 Zenoh mesh 广播命令到多台机器人。模拟与硬件代码完全一致，只需改一个关键字参数。示例可在笔记本（Python 3.12+，Linux/macOS）无硬件、无 GPU 运行。\n\n原文链接: https://huggingface.co/blog/amazon/strands-lerobot-hub-to-hardware",
+    "category": "产品发布",
+    "tags": [
+      "机器人"
+    ]
+  },
+  {
     "id": "news-20260612-c5557d32",
     "title": "OpenRouter融合预算模型面板超越GPT-5.5和Claude Opus 4.8",
     "author": "OpenRouter：Announcements（RSS）",
