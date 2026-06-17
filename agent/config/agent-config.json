@@ -1,0 +1,48 @@
+{
+  "name": "dragon-news-publisher",
+  "version": "1.0.0",
+  "description": "龙虾新闻自动化发布 Agent - 基于大模型的网站自动化更新系统",
+  "agent": {
+    "model": "td/deepseek-v4-flash",
+    "provider": {
+      "baseUrl": "https://tokendance.space/gateway/v1",
+      "api": "openai-completions"
+    },
+    "tools": [
+      {
+        "type": "mcp",
+        "server": {
+          "command": "python3",
+          "args": ["agent/tools/mcp_server.py"],
+          "cwd": "${PROJECT_ROOT}"
+        }
+      }
+    ]
+  },
+  "workflow": {
+    "name": "news-publish-flow",
+    "description": "接收新闻稿 → 结构化解析 → 写入数据 → Git 推送",
+    "steps": [
+      {
+        "id": "parse",
+        "name": "新闻文本解析",
+        "description": "从纯文本中提取标题、作者、日期、摘要、正文、分类和标签"
+      },
+      {
+        "id": "validate",
+        "name": "数据验证",
+        "description": "验证提取的数据完整性和格式合规性"
+      },
+      {
+        "id": "write",
+        "name": "写入新闻数据",
+        "description": "调用 add_news 工具将结构化数据写入 news.json"
+      },
+      {
+        "id": "publish",
+        "name": "Git 提交推送",
+        "description": "调用 git_publish 工具完成版本控制和远端同步"
+      }
+    ]
+  }
+}

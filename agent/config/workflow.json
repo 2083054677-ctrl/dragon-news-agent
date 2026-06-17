@@ -1,0 +1,106 @@
+{
+  "name": "news-publish-flow",
+  "version": "1.0.0",
+  "description": "新闻自动化发布工作流 - 从纯文本到网站更新的端到端自动化",
+  "trigger": {
+    "type": "message",
+    "condition": "用户发送新闻稿文本"
+  },
+  "variables": {
+    "raw_text": "${user_input}",
+    "today_date": "${current_date}"
+  },
+  "nodes": [
+    {
+      "id": "input_sanitize",
+      "type": "function",
+      "name": "输入清洗",
+      "description": "对用户输入的新闻稿文本进行安全清洗，移除潜在的 Prompt 注入和恶意内容",
+      "function": "sanitize_news_text",
+      "input": "${raw_text}",
+      "output": "sanitized_text"
+    },
+    {
+      "id": "parse_news",
+      "type": "llm",
+      "name": "结构化解析",
+      "description": "使用大模型从清洗后的文本中提取新闻要素",
+      "prompt": "请从以下新闻稿文本中提取结构化信息。严格按照 JSON 格式输出，不要添加任何解释。\n\n必须提取的字段：\n- title: 新闻标题\n- author: 作者/来源\n- date: 日期(YYYY-MM-DD)\n- summary: 一句话摘要(100字以内)\n- content: 正文内容\n- category: 分类(AI 前沿/政策动态/产品发布/行业观察/研究论文/开源项目)\n- tags: 标签数组(3-5个)\n\n新闻稿原文：\n---\n${sanitized_text}\n---\n\n输出 JSON：",
+      "model": "deepseek-v4-flash",
+      "output_format": "json",
+      "output": "parsed_news"
+    },
+    {
+      "id": "validate",
+      "type": "condition",
+      "name": "数据验证",
+      "description": "验证解析结果的完整性",
+      "conditions": [
+        {
+          "check": "${parsed_news.title} != ''",
+          "on_fail": "error: 无法提取标题"
+        },
+        {
+          "check": "${parsed_news.content} != ''",
+          "on_fail": "error: 无法提取正文"
+        },
+        {
+          "check": "${parsed_news.date} matches YYYY-MM-DD",
+          "on_fail": "use_today_date"
+        }
+      ],
+      "on_pass": "write_news",
+      "on_fail": "request_info"
+    },
+    {
+      "id": "write_news",
+      "type": "tool_call",
+      "name": "写入新闻",
+      "description": "调用 add_news 工具写入数据",
+      "tool": "add_news",
+      "arguments": {
+        "title": "${parsed_news.title}",
+        "author": "${parsed_news.author}",
+        "date": "${parsed_news.date}",
+        "summary": "${parsed_news.summary}",
+        "content": "${parsed_news.content}",
+        "category": "${parsed_news.category}",
+        "tags": "${parsed_news.tags}"
+      },
+      "output": "write_result",
+      "on_success": "git_push",
+      "on_error": "report_error"
+    },
+    {
+      "id": "git_push",
+      "type": "tool_call",
+      "name": "Git 发布",
+      "description": "提交并推送变更",
+      "tool": "git_publish",
+      "arguments": {
+        "commit_message": "publish: ${parsed_news.title}"
+      },
+      "output": "git_result",
+      "on_success": "report_success",
+      "on_error": "report_error"
+    },
+    {
+      "id": "report_success",
+      "type": "response",
+      "name": "成功报告",
+      "template": "✅ 新闻发布成功！\n\n📰 标题: ${parsed_news.title}\n📅 日期: ${parsed_news.date}\n📂 分类: ${parsed_news.category}\n🏷️ 标签: ${parsed_news.tags}\n\n🔗 Git Commit: ${git_result.commit_hash}\n📤 推送状态: ${git_result.pushed ? '已推送到远端' : '本地提交成功'}"
+    },
+    {
+      "id": "report_error",
+      "type": "response",
+      "name": "错误报告",
+      "template": "❌ 发布失败\n\n原因: ${error_message}\n\n请检查后重试。"
+    },
+    {
+      "id": "request_info",
+      "type": "response",
+      "name": "请求补充信息",
+      "template": "⚠️ 新闻稿信息不完整\n\n缺少以下字段: ${missing_fields}\n\n请补充以上信息后重新发送。"
+    }
+  ]
+}

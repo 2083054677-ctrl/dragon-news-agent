@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙虾新闻 | AI 驱动的自动化新闻站</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>">
+    <style>
+        :root {
+            --primary: #e63946;
+            --primary-dark: #c1121f;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #1d3557;
+            --text-secondary: #457b9d;
+            --border: #e9ecef;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(230, 57, 70, 0.3);
+        }
+
+        .header-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            opacity: 0.85;
+            font-weight: 400;
+        }
+
+        .header-badge {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #a8dadc;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-chip {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .news-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .news-category {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .news-date, .news-author {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .news-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        .news-summary {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .news-content {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.8;
+            white-space: pre-line;
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+
+        .news-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: #f1faee;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 8px;
+            border: 1px solid #a8dadc;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        @media (max-width: 640px) {
+            .header-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
+            .main { padding: 1.5rem 1rem; }
+            .news-card { padding: 1.25rem; }
+            .news-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">🦞</span>
+                <div class="logo-text">
+                    <h1>龙虾新闻</h1>
+                    <p>Agent 驱动 · 自动化发布</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="pulse-dot"></span>
+                <span>由 OpenClaw Agent 自动更新</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="stats-bar" id="stats-bar"></div>
+        <div class="news-list" id="news-list">
+            <div class="empty-state">
+                <div class="icon">📡</div>
+                <p>正在加载新闻数据...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>🦞 龙虾新闻 — 基于大模型 Agent 的自动化发布系统</p>
+        <p style="margin-top: 0.5rem;">OpenClaw + DeepSeek V4 · Tool Calling · Git Automation</p>
+    </footer>
+
+    <script>
+        async function loadNews() {
+            try {
+                const response = await fetch('./data/news.json');
+                const news = await response.json();
+                renderStats(news);
+                renderNews(news);
+            } catch (e) {
+                document.getElementById('news-list').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <p>无法加载新闻数据: ${e.message}</p>
+                    </div>`;
+            }
+        }
+
+        function renderStats(news) {
+            const categories = [...new Set(news.map(n => n.category))];
+            const latest = news.length ? news[0].date : '-';
+            document.getElementById('stats-bar').innerHTML = `
+                <div class="stat-chip">📰 共 ${news.length} 篇报道</div>
+                <div class="stat-chip">📂 ${categories.length} 个分类</div>
+                <div class="stat-chip">🕐 最近更新: ${latest}</div>
+            `;
+        }
+
+        function renderNews(news) {
+            if (!news.length) {
+                document.getElementById('news-list').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>暂无新闻，等待 Agent 发布...</p>
+                    </div>`;
+                return;
+            }
+            document.getElementById('news-list').innerHTML = news
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .map(item => `
+                    <article class="news-card">
+                        <div class="news-meta">
+                            <span class="news-category">${item.category}</span>
+                            <span class="news-date">📅 ${item.date}</span>
+                            <span class="news-author">✍️ ${item.author}</span>
+                        </div>
+                        <h2 class="news-title">${item.title}</h2>
+                        <p class="news-summary">${item.summary}</p>
+                        <div class="news-content">${item.content}</div>
+                        <div class="news-tags">
+                            ${item.tags.map(t => `<span class="tag">#${t}</span>`).join('')}
+                        </div>
+                    </article>
+                `).join('');
+        }
+
+        loadNews();
+    </script>
+</body>
+</html>
