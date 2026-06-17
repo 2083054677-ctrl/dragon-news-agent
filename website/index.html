@@ -7,327 +7,737 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦞</text></svg>">
     <style>
         :root {
-            --primary: #e63946;
-            --primary-dark: #c1121f;
-            --bg: #f8f9fa;
-            --card-bg: #ffffff;
-            --text: #1d3557;
-            --text-secondary: #457b9d;
-            --border: #e9ecef;
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --radius: 12px;
+            --bg: #f7f8fa;
+            --sidebar-bg: #ffffff;
+            --content-bg: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --hot: #ef4444;
+            --tag-bg: #f3f4f6;
+            --shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.7;
+            line-height: 1.6;
             min-height: 100vh;
         }
 
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 2rem 0;
+        .layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        /* ═══ 左侧导航栏 ═══ */
+        .sidebar {
+            width: 220px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 0;
             position: sticky;
             top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 20px rgba(230, 57, 70, 0.3);
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
         }
 
-        .header-inner {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        .sidebar-logo {
+            padding: 0 1.25rem;
+            margin-bottom: 2rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 0.5rem;
         }
 
-        .logo {
+        .sidebar-logo .icon { font-size: 1.5rem; }
+
+        .sidebar-logo .text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .sidebar-logo .sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 1px;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+            border-left-color: var(--accent);
+        }
+
+        .nav-item .nav-icon {
+            width: 18px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .nav-item .count {
+            margin-left: auto;
+            font-size: 0.7rem;
+            background: var(--tag-bg);
+            color: var(--text-muted);
+            padding: 0.1rem 0.4rem;
+            border-radius: 8px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 1rem;
+            left: 0;
+            right: 0;
+            padding: 0 1.25rem;
+        }
+
+        .agent-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* ═══ 主内容区 ═══ */
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            max-width: 900px;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .page-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* 今日热点 */
+        .hot-section {
+            background: var(--content-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .hot-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--hot);
+        }
+
+        .hot-list {
+            list-style: none;
+        }
+
+        .hot-list li {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            padding: 0.35rem 0;
+            font-size: 0.85rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .hot-list li:hover { color: var(--accent); }
+
+        .hot-list .hot-rank {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 16px;
+        }
+
+        .hot-list li:nth-child(1) .hot-rank,
+        .hot-list li:nth-child(2) .hot-rank,
+        .hot-list li:nth-child(3) .hot-rank { color: var(--hot); }
+
+        .hot-list .hot-source {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* 时间线信息流 */
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+            padding-left: 0.5rem;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-date:first-child { margin-top: 0; }
+
+        .news-item {
+            background: var(--content-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .news-item:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .news-item-header {
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            margin-bottom: 0.6rem;
         }
 
-        .logo-icon {
-            font-size: 2rem;
-        }
-
-        .logo-text h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .logo-text p {
+        .news-time {
             font-size: 0.8rem;
-            opacity: 0.85;
-            font-weight: 400;
-        }
-
-        .header-badge {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 0.4rem 1rem;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .pulse-dot {
-            width: 8px;
-            height: 8px;
-            background: #a8dadc;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        .main {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .stats-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-chip {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .news-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .news-card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 1.75rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .news-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-            border-radius: 4px 0 0 4px;
-        }
-
-        .news-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
-
-        .news-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .news-category {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            font-size: 0.7rem;
             font-weight: 600;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            font-variant-numeric: tabular-nums;
         }
 
-        .news-date, .news-author {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
+        .news-source {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: var(--tag-bg);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .news-category-badge {
+            font-size: 0.65rem;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
         }
 
         .news-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.6rem;
+            font-size: 1.05rem;
+            font-weight: 600;
             color: var(--text);
-            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
         }
 
         .news-summary {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.6;
+            line-height: 1.7;
+            margin-bottom: 0.75rem;
         }
 
-        .news-content {
-            font-size: 0.9rem;
-            color: var(--text);
-            line-height: 1.8;
-            white-space: pre-line;
+        .news-content-preview {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
             border-top: 1px solid var(--border);
-            padding-top: 1rem;
+            padding-top: 0.75rem;
+            display: none;
         }
 
-        .news-tags {
+        .news-item.expanded .news-content-preview { display: block; }
+
+        .news-footer {
             display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            align-items: center;
+            gap: 0.6rem;
             flex-wrap: wrap;
         }
 
-        .tag {
-            background: #f1faee;
-            color: var(--text-secondary);
+        .news-tag {
             font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 8px;
-            border: 1px solid #a8dadc;
+            color: var(--text-muted);
+            background: var(--tag-bg);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
         }
 
-        .footer {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--text-secondary);
+        .news-expand {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--accent);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .news-expand:hover { text-decoration: underline; }
+
+        /* ═══ 右侧面板 ═══ */
+        .right-panel {
+            width: 280px;
+            padding: 2rem 1.5rem;
+            border-left: 1px solid var(--border);
+            background: var(--sidebar-bg);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .panel-section {
+            margin-bottom: 2rem;
+        }
+
+        .panel-title {
             font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
         }
 
+        .stat-card {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-card .label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .recent-commits {
+            list-style: none;
+        }
+
+        .recent-commits li {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+        }
+
+        .recent-commits li:last-child { border-bottom: none; }
+
+        .commit-hash {
+            font-family: "SF Mono", "Fira Code", monospace;
+            font-size: 0.65rem;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+        }
+
+        .commit-msg {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* ═══ 空状态 ═══ */
         .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-secondary);
+            padding: 3rem 2rem;
+            color: var(--text-muted);
         }
 
-        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
 
-        @media (max-width: 640px) {
-            .header-inner { flex-direction: column; gap: 0.75rem; text-align: center; }
-            .main { padding: 1.5rem 1rem; }
-            .news-card { padding: 1.25rem; }
-            .news-title { font-size: 1.1rem; }
+        /* ═══ 响应式 ═══ */
+        @media (max-width: 1200px) {
+            .right-panel { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { padding: 1.5rem 1rem; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-inner">
-            <div class="logo">
-                <span class="logo-icon">🦞</span>
-                <div class="logo-text">
-                    <h1>龙虾新闻</h1>
-                    <p>Agent 驱动 · 自动化发布</p>
+    <div class="layout">
+        <!-- 左侧导航 -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <span class="icon">🦞</span>
+                <div>
+                    <span class="text">龙虾新闻</span>
+                    <span class="sub">Agent 自动化发布</span>
                 </div>
             </div>
-            <div class="header-badge">
-                <span class="pulse-dot"></span>
-                <span>由 OpenClaw Agent 自动更新</span>
-            </div>
-        </div>
-    </header>
 
-    <main class="main">
-        <div class="stats-bar" id="stats-bar"></div>
-        <div class="news-list" id="news-list">
-            <div class="empty-state">
-                <div class="icon">📡</div>
-                <p>正在加载新闻数据...</p>
-            </div>
-        </div>
-    </main>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-item active" data-filter="all">
+                        <span class="nav-icon">📋</span>
+                        <span>精选</span>
+                        <span class="count" id="count-all">0</span>
+                    </div>
+                    <div class="nav-item" data-filter="全部">
+                        <span class="nav-icon">📰</span>
+                        <span>全部动态</span>
+                    </div>
+                </div>
 
-    <footer class="footer">
-        <p>🦞 龙虾新闻 — 基于大模型 Agent 的自动化发布系统</p>
-        <p style="margin-top: 0.5rem;">OpenClaw + DeepSeek V4 · Tool Calling · Git Automation</p>
-    </footer>
+                <div class="nav-section">
+                    <div class="nav-section-title">分类</div>
+                    <div class="nav-item" data-filter="AI 前沿">
+                        <span class="nav-icon">🧠</span>
+                        <span>AI 前沿</span>
+                        <span class="count" id="count-ai">0</span>
+                    </div>
+                    <div class="nav-item" data-filter="政策动态">
+                        <span class="nav-icon">📜</span>
+                        <span>政策动态</span>
+                        <span class="count" id="count-policy">0</span>
+                    </div>
+                    <div class="nav-item" data-filter="产品发布">
+                        <span class="nav-icon">🚀</span>
+                        <span>产品发布</span>
+                        <span class="count" id="count-product">0</span>
+                    </div>
+                    <div class="nav-item" data-filter="行业观察">
+                        <span class="nav-icon">📊</span>
+                        <span>行业观察</span>
+                        <span class="count" id="count-industry">0</span>
+                    </div>
+                    <div class="nav-item" data-filter="研究论文">
+                        <span class="nav-icon">📄</span>
+                        <span>研究论文</span>
+                        <span class="count" id="count-paper">0</span>
+                    </div>
+                    <div class="nav-item" data-filter="开源项目">
+                        <span class="nav-icon">💻</span>
+                        <span>开源项目</span>
+                        <span class="count" id="count-oss">0</span>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">工具</div>
+                    <div class="nav-item" onclick="location.reload()">
+                        <span class="nav-icon">🔄</span>
+                        <span>刷新数据</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="agent-status">
+                    <span class="status-dot"></span>
+                    <span>Agent 在线 · DeepSeek V4</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title" id="page-title">精选</h1>
+                <p class="page-subtitle" id="page-subtitle">AI 领域最新资讯，由 Agent 自动采集发布</p>
+            </div>
+
+            <!-- 今日热点 -->
+            <div class="hot-section" id="hot-section">
+                <div class="hot-header">
+                    <span>🔥</span> 今日热点
+                </div>
+                <ol class="hot-list" id="hot-list"></ol>
+            </div>
+
+            <!-- 时间线信息流 -->
+            <div class="timeline" id="timeline">
+                <div class="empty-state">
+                    <div class="icon">📡</div>
+                    <p>正在加载新闻...</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 右侧面板 -->
+        <aside class="right-panel">
+            <div class="panel-section">
+                <div class="panel-title">📊 数据概览</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="num" id="stat-total">0</div>
+                        <div class="label">总发布</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num" id="stat-today">0</div>
+                        <div class="label">今日新增</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num" id="stat-categories">0</div>
+                        <div class="label">分类数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num" id="stat-sources">0</div>
+                        <div class="label">信息源</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-title">🔗 最近提交</div>
+                <ul class="recent-commits" id="recent-commits">
+                    <li>
+                        <span class="commit-hash">9b1be51</span>
+                        <span class="commit-msg">publish: Anthropic Claude 4</span>
+                    </li>
+                    <li>
+                        <span class="commit-hash">b3e3452</span>
+                        <span class="commit-msg">feat: 完成工程文件</span>
+                    </li>
+                    <li>
+                        <span class="commit-hash">f25010a</span>
+                        <span class="commit-msg">init: 系统初始化</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-title">⚙️ 系统信息</div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.8;">
+                    <div>模型: DeepSeek V4 Flash</div>
+                    <div>平台: OpenClaw</div>
+                    <div>协议: MCP (stdio)</div>
+                    <div>数据: news.json</div>
+                </div>
+            </div>
+        </aside>
+    </div>
 
     <script>
+        let allNews = [];
+        let currentFilter = 'all';
+
         async function loadNews() {
             try {
                 const response = await fetch('./data/news.json');
-                const news = await response.json();
-                renderStats(news);
-                renderNews(news);
+                allNews = await response.json();
+                updateStats();
+                updateCounts();
+                renderHot();
+                renderTimeline(allNews);
             } catch (e) {
-                document.getElementById('news-list').innerHTML = `
+                document.getElementById('timeline').innerHTML = `
                     <div class="empty-state">
                         <div class="icon">⚠️</div>
-                        <p>无法加载新闻数据: ${e.message}</p>
+                        <p>加载失败: ${e.message}</p>
                     </div>`;
             }
         }
 
-        function renderStats(news) {
-            const categories = [...new Set(news.map(n => n.category))];
-            const latest = news.length ? news[0].date : '-';
-            document.getElementById('stats-bar').innerHTML = `
-                <div class="stat-chip">📰 共 ${news.length} 篇报道</div>
-                <div class="stat-chip">📂 ${categories.length} 个分类</div>
-                <div class="stat-chip">🕐 最近更新: ${latest}</div>
-            `;
+        function updateStats() {
+            const today = new Date().toISOString().slice(0, 10);
+            const todayCount = allNews.filter(n => n.date === today).length;
+            const categories = [...new Set(allNews.map(n => n.category))];
+            const sources = [...new Set(allNews.map(n => n.author))];
+
+            document.getElementById('stat-total').textContent = allNews.length;
+            document.getElementById('stat-today').textContent = todayCount;
+            document.getElementById('stat-categories').textContent = categories.length;
+            document.getElementById('stat-sources').textContent = sources.length;
         }
 
-        function renderNews(news) {
+        function updateCounts() {
+            document.getElementById('count-all').textContent = allNews.length;
+            const countMap = { 'AI 前沿': 'count-ai', '政策动态': 'count-policy', '产品发布': 'count-product', '行业观察': 'count-industry', '研究论文': 'count-paper', '开源项目': 'count-oss' };
+            Object.entries(countMap).forEach(([cat, id]) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = allNews.filter(n => n.category === cat).length;
+            });
+        }
+
+        function renderHot() {
+            const hot = allNews.slice(0, 5);
+            document.getElementById('hot-list').innerHTML = hot.map((item, i) => `
+                <li>
+                    <span class="hot-rank">${i + 1}</span>
+                    <span>${item.title}</span>
+                    <span class="hot-source">${item.author.slice(0, 6)}</span>
+                </li>
+            `).join('');
+        }
+
+        function renderTimeline(news) {
             if (!news.length) {
-                document.getElementById('news-list').innerHTML = `
+                document.getElementById('timeline').innerHTML = `
                     <div class="empty-state">
                         <div class="icon">📭</div>
                         <p>暂无新闻，等待 Agent 发布...</p>
                     </div>`;
                 return;
             }
-            document.getElementById('news-list').innerHTML = news
-                .sort((a, b) => new Date(b.date) - new Date(a.date))
-                .map(item => `
-                    <article class="news-card">
-                        <div class="news-meta">
-                            <span class="news-category">${item.category}</span>
-                            <span class="news-date">📅 ${item.date}</span>
-                            <span class="news-author">✍️ ${item.author}</span>
-                        </div>
-                        <h2 class="news-title">${item.title}</h2>
-                        <p class="news-summary">${item.summary}</p>
-                        <div class="news-content">${item.content}</div>
-                        <div class="news-tags">
-                            ${item.tags.map(t => `<span class="tag">#${t}</span>`).join('')}
-                        </div>
-                    </article>
-                `).join('');
+
+            // 按日期分组
+            const grouped = {};
+            news.sort((a, b) => new Date(b.date) - new Date(a.date));
+            news.forEach(item => {
+                const date = item.date;
+                if (!grouped[date]) grouped[date] = [];
+                grouped[date].push(item);
+            });
+
+            let html = '';
+            const today = new Date().toISOString().slice(0, 10);
+
+            Object.entries(grouped).forEach(([date, items]) => {
+                const label = date === today ? '今天' : date;
+                html += `<div class="timeline-date">${label}</div>`;
+                items.forEach(item => {
+                    const time = item.date === today ? new Date().toTimeString().slice(0, 5) : '09:00';
+                    const contentPreview = item.content.replace(/\n/g, '<br>');
+                    html += `
+                        <article class="news-item" data-id="${item.id}">
+                            <div class="news-item-header">
+                                <span class="news-time">${time}</span>
+                                <span class="news-source">${item.author}</span>
+                                <span class="news-category-badge">${item.category}</span>
+                            </div>
+                            <h3 class="news-title">${item.title}</h3>
+                            <p class="news-summary">${item.summary}</p>
+                            <div class="news-content-preview">${contentPreview}</div>
+                            <div class="news-footer">
+                                ${item.tags.map(t => `<span class="news-tag">#${t}</span>`).join('')}
+                                <button class="news-expand" onclick="toggleExpand(this)">展开全文</button>
+                            </div>
+                        </article>
+                    `;
+                });
+            });
+
+            document.getElementById('timeline').innerHTML = html;
         }
+
+        function toggleExpand(btn) {
+            const item = btn.closest('.news-item');
+            item.classList.toggle('expanded');
+            btn.textContent = item.classList.contains('expanded') ? '收起' : '展开全文';
+        }
+
+        // 导航筛选
+        document.querySelectorAll('.nav-item[data-filter]').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+
+                const filter = item.dataset.filter;
+                currentFilter = filter;
+
+                if (filter === 'all' || filter === '全部') {
+                    renderTimeline(allNews);
+                    document.getElementById('page-title').textContent = filter === 'all' ? '精选' : '全部动态';
+                } else {
+                    const filtered = allNews.filter(n => n.category === filter);
+                    renderTimeline(filtered);
+                    document.getElementById('page-title').textContent = filter;
+                }
+            });
+        });
 
         loadNews();
     </script>

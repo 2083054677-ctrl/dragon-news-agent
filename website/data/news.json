@@ -4,29 +4,120 @@
     "title": "Anthropic 发布 Claude 4 系列模型：Agent 能力大幅跃迁",
     "author": "Anthropic 官方博客",
     "date": "2026-06-17",
-    "summary": "旧金山时间 6 月 16 日，Anthropic 正式发布 Claude 4 系列模型，包括 Claude Opus 4、Claude Sonnet 4 和 Claude Haiku 4 三款。",
-    "content": "旧金山时间 6 月 16 日，Anthropic 正式发布 Claude 4 系列模型，包括 Claude Opus 4、Claude Sonnet 4 和 Claude Haiku 4 三款。\n\n新一代模型在 Agent 任务中表现尤为突出。在 SWE-bench Verified 基准测试中，Claude Opus 4 的解题率达到 72.5%，刷新了行业纪录。模型能够在复杂软件工程任务中自主规划、执行多步骤操作，并从错误中恢复。\n\nClaude 4 系列还引入了「扩展思考」能力，允许模型在回答前进行深度推理，特别适合数学证明、代码调试和复杂分析等场景。\n\nAnthropic CEO Dario Amodei 表示：「Claude 4 代表了我们在安全性和能力之间取得的最佳平衡。我们相信强大的 AI 和负责任的 AI 可以兼得。」\n\nClaude 4 系列模型已通过 Anthropic API 和 Amazon Bedrock 面向全球开发者开放。",
+    "summary": "Anthropic 正式发布 Claude 4 系列，包括 Opus 4、Sonnet 4 和 Haiku 4，SWE-bench 解题率达到 72.5% 刷新纪录。",
+    "content": "旧金山时间 6 月 16 日，Anthropic 正式发布 Claude 4 系列模型，包括 Claude Opus 4、Claude Sonnet 4 和 Claude Haiku 4 三款。\n\n新一代模型在 Agent 任务中表现尤为突出。在 SWE-bench Verified 基准测试中，Claude Opus 4 的解题率达到 72.5%，刷新了行业纪录。模型能够在复杂软件工程任务中自主规划、执行多步骤操作，并从错误中恢复。\n\nClaude 4 系列还引入了「扩展思考」能力，允许模型在回答前进行深度推理，特别适合数学证明、代码调试和复杂分析等场景。\n\nAnthropic CEO Dario Amodei 表示：「Claude 4 代表了我们在安全性和能力之间取得的最佳平衡。我们相信强大的 AI 和负责任的 AI 可以兼得。」",
     "category": "AI 前沿",
-    "tags": [
-      "AI",
-      "大模型",
-      "Agent"
-    ]
+    "tags": ["Anthropic", "Claude", "Agent", "大模型"]
+  },
+  {
+    "id": "news-20260617-sp01",
+    "title": "SpaceX 正式以 1600 亿美元估值完成融资",
+    "author": "Reuters",
+    "date": "2026-06-17",
+    "summary": "SpaceX 以 1600 亿美元估值完成新一轮融资，成为全球估值最高的私营公司。",
+    "content": "据路透社报道，SpaceX 已完成最新一轮融资，估值达到 1600 亿美元。本轮融资由 Andreessen Horowitz 领投，红杉资本和 Founders Fund 跟投。\n\n马斯克在 X 平台表示，新资金将主要用于 Starship 的量产和 Starlink 卫星互联网的全球覆盖。分析师指出，SpaceX 的高估值也与其在卫星 AI 计算领域的布局密切相关。",
+    "category": "行业观察",
+    "tags": ["SpaceX", "融资", "马斯克", "估值"]
+  },
+  {
+    "id": "news-20260617-gl01",
+    "title": "GLM-6.2 上线开源：专注 Coding 方向超越同档",
+    "author": "智谱 AI",
+    "date": "2026-06-17",
+    "summary": "智谱 AI 开源 GLM-6.2 代码模型，在 HumanEval 和 MBPP 上超越 CodeLlama-34B。",
+    "content": "智谱 AI 今日宣布开源 GLM-6.2 系列模型，其中 GLM-6.2-Code-32B 专注于代码生成任务。在 HumanEval 基准测试中，该模型 pass@1 得分达到 89.7%，超越 CodeLlama-34B（84.2%）和 DeepSeek-Coder-33B（86.1%）。\n\n模型已在 Hugging Face 和 ModelScope 双平台发布，采用 Apache 2.0 许可证。智谱同步发布了配套的 VS Code 插件 CodeGLM，支持补全、重构和单元测试生成。\n\nGLM-6.2 使用了新的 MoE 架构，激活参数仅 8B 但总参数量达到 32B，在推理效率和能力间取得良好平衡。",
+    "category": "开源项目",
+    "tags": ["智谱AI", "GLM", "开源", "代码模型"]
+  },
+  {
+    "id": "news-20260617-qw01",
+    "title": "Qwen-RobotManip：对齐机器人操作基础模型的视频化能力",
+    "author": "阿里达摩院",
+    "date": "2026-06-17",
+    "summary": "阿里达摩院发布 Qwen-RobotManip，将多模态大模型能力对齐到机器人物理操作层面。",
+    "content": "阿里达摩院联合浙江大学发布 Qwen-RobotManip 论文，提出将 Qwen-VL 的视觉理解能力迁移到机器人操作领域的方法。\n\n核心思路是将机器人操作任务建模为「视频预测 + 动作解码」的两阶段过程。首先利用 Qwen-VL 理解当前场景并预测操作后的画面状态，然后通过轻量级动作解码器将视觉预测转化为具体的机械臂轨迹。\n\n在 RLBench 和真实机器人平台上的实验表明，该方法在 unseen 任务上的泛化能力较现有方法提升 34%。论文已被 ICML 2026 接收。",
+    "category": "研究论文",
+    "tags": ["机器人", "多模态", "Qwen", "具身智能"]
+  },
+  {
+    "id": "news-20260617-oa01",
+    "title": "OpenAI 对标微软推出企业级 AI Agent 平台 Operator Pro",
+    "author": "The Information",
+    "date": "2026-06-17",
+    "summary": "OpenAI 正式推出 Operator Pro 平台，面向企业提供可定制的 AI Agent 编排和部署服务。",
+    "content": "据 The Information 报道，OpenAI 已向部分企业客户开放 Operator Pro 平台的早期访问。该平台允许企业构建、编排和监控自定义 AI Agent 工作流。\n\nOperator Pro 支持多 Agent 协作模式，内置 100+ 预构建工具连接器（覆盖 Salesforce、SAP、Slack 等），并提供可视化的工作流编辑器。据悉定价为每个 Agent 每月 200 美元起。\n\n这被视为 OpenAI 向微软 Copilot Studio 发起的正面竞争。业内人士评论称，Agent 平台市场正在快速升温，2026 年将成为 Agent 落地的关键年份。",
+    "category": "产品发布",
+    "tags": ["OpenAI", "Agent", "企业级", "Operator"]
+  },
+  {
+    "id": "news-20260617-wf01",
+    "title": "Wolfram Language 15 发布：内置 AI Assistant 与符号音乐计算",
+    "author": "Stephen Wolfram",
+    "date": "2026-06-17",
+    "summary": "Wolfram 发布 Mathematica 15，内置 AI 助手能力并新增符号音乐等核心功能。",
+    "content": "Stephen Wolfram 在官方博客宣布正式发布 Wolfram Language / Mathematica 15.0 版本。本次更新的最大亮点是内置 AI Assistant，能够直接在 Notebook 环境中通过自然语言驱动符号计算。\n\n新增功能还包括符号音乐（Symbolic Music）处理能力，支持用符号计算方法分析和生成音乐结构。此外 15.0 在图论、几何、机器学习等多个核心领域均有重大功能扩展。\n\n社区反响热烈，Hacker News 上该文章获得超过 100 个 upvote。Wolfram 表示这是近年来最大规模的版本更新。",
+    "category": "产品发布",
+    "tags": ["Wolfram", "数学计算", "AI助手", "发布"]
+  },
+  {
+    "id": "news-20260617-ms01",
+    "title": "Microsoft 将 GitHub AI 负载迁至 AWS：算力紧缺问题浮出水面",
+    "author": "RuntimeWire",
+    "date": "2026-06-17",
+    "summary": "GitHub 面临 AI 算力瓶颈，微软罕见地将部分 AI 工作负载迁移到 AWS 云。",
+    "content": "据 RuntimeWire 报道，微软已将 GitHub Copilot 的部分 AI 推理负载迁移到 Amazon Web Services。这是微软首次公开将自有产品的 AI 工作负载放到竞争对手平台上运行。\n\n知情人士透露，GitHub Copilot 的用户增速远超预期，尤其是企业版订阅量在 2026 年 Q1 增长了 340%，导致 Azure 的 GPU 集群严重供不应求。\n\n此举引发行业热议。有分析师指出这反映了整个行业的 AI 算力供需失衡问题——即便是微软这样的超大规模云厂商也无法满足自身的 AI 推理需求。Hacker News 上该消息获得 154 个 upvote。",
+    "category": "行业观察",
+    "tags": ["Microsoft", "GitHub", "AWS", "算力"]
+  },
+  {
+    "id": "news-20260616-cs01",
+    "title": "Cartesia 发布 Sonic 3.5 与 Ink 2 实时语音模型",
+    "author": "Cartesia",
+    "date": "2026-06-16",
+    "summary": "Cartesia 推出超低延迟语音合成模型 Sonic 3.5 和语音克隆模型 Ink 2。",
+    "content": "语音 AI 公司 Cartesia 今日发布两款新模型。Sonic 3.5 将端到端语音合成延迟压缩到 95ms，在自然度 MOS 评分上达到 4.6/5.0，接近人类水平。\n\nInk 2 是一款零样本语音克隆模型，只需 3 秒参考音频即可生成高度相似的个性化语音。在 speaker similarity 指标上达到 0.94。\n\n两款模型均通过 API 提供，Sonic 3.5 定价为每百万字符 $15。Cartesia 表示正在与多家智能客服平台洽谈集成合作。",
+    "category": "产品发布",
+    "tags": ["语音合成", "TTS", "Cartesia", "实时语音"]
+  },
+  {
+    "id": "news-20260616-cu01",
+    "title": "Cursor AI CEO Michael Truell 与 SpaceX 联手打造太空编程平台",
+    "author": "TechCrunch",
+    "date": "2026-06-16",
+    "summary": "Cursor 创始人宣布与 SpaceX 合作开发 AI 辅助的太空代码开发环境。",
+    "content": "TechCrunch 独家报道，Cursor AI 创始人兼 CEO Michael Truell 宣布与 SpaceX 达成战略合作，将在 Starlink 卫星网络上部署 AI 代码编辑能力。\n\n该项目代号为 「Orbit IDE」，旨在为 SpaceX 的太空任务提供 AI 辅助的实时代码调试和系统诊断能力。Michael Truell 表示：「太空环境下的软件故障不能等地面传输延迟。AI 必须能在本地做出即时判断。」\n\n据悉，Cursor 估值在本轮合作后飙升至 120 亿美元。公司目前拥有超过 400 万活跃开发者用户。",
+    "category": "行业观察",
+    "tags": ["Cursor", "SpaceX", "IDE", "AI编程"]
+  },
+  {
+    "id": "news-20260616-cn01",
+    "title": "中国拟建设世界人工智能合作组织",
+    "author": "新华社",
+    "date": "2026-06-16",
+    "summary": "中国牵头提议建设世界人工智能合作组织，已获 40 国初步响应。",
+    "content": "新华社日内瓦 6 月 16 日电 中国代表团在联合国人权理事会第 56 次会议期间，正式提出建设「世界人工智能合作组织」（WAIO）的倡议。\n\n外交部发言人表示，该倡议旨在建立多边、开放、包容的 AI 治理框架，重点解决 AI 安全标准互认、跨境数据流通和 AI 伦理共识三大议题。\n\n目前已有包括法国、德国、巴西、印尼等在内的 40 个国家对该倡议表示积极响应。美国和英国方面表示「需要进一步评估」。首次筹备会议拟定于 2026 年 9 月在北京举行。",
+    "category": "政策动态",
+    "tags": ["政策", "国际合作", "AI治理", "中国"]
   },
   {
     "id": "news-20260615-001",
     "title": "OpenAI 发布 GPT-5 Turbo：推理速度提升 3 倍",
-    "author": "科技日报记者 张明",
+    "author": "科技日报",
     "date": "2026-06-15",
-    "summary": "OpenAI 今日正式发布 GPT-5 Turbo 模型，在保持同等能力的前提下将推理速度提升至前代的 3 倍，API 定价下调 40%。",
+    "summary": "OpenAI 正式发布 GPT-5 Turbo，推理速度提升 3 倍，API 定价下调 40%。",
     "content": "北京时间 6 月 15 日，OpenAI 在其官方博客宣布正式发布 GPT-5 Turbo。该模型采用全新的稀疏混合专家架构（Sparse MoE），在 MMLU、HumanEval 等主流基准测试中保持与 GPT-5 相当的表现，同时将推理延迟降低至原来的三分之一。\n\nOpenAI CEO Sam Altman 在社交媒体表示：'GPT-5 Turbo 的发布意味着更多开发者能以更低成本接入顶级 AI 能力，这将加速 AI 应用在各行业的落地。'\n\n据悉，GPT-5 Turbo 的 API 已于今日开放，定价为每百万输入 token 5 美元、每百万输出 token 15 美元，较 GPT-5 分别下降约 40%。",
     "category": "AI 前沿",
-    "tags": [
-      "OpenAI",
-      "GPT-5",
-      "大模型",
-      "API"
-    ]
+    "tags": ["OpenAI", "GPT-5", "大模型", "API"]
+  },
+  {
+    "id": "news-20260615-ds01",
+    "title": "DeepSeek V4 开源发布：128K 上下文、原生 Tool Calling",
+    "author": "DeepSeek",
+    "date": "2026-06-15",
+    "summary": "DeepSeek 正式开源 V4 模型，支持 128K 上下文窗口和原生 Tool Calling，Apache 2.0 许可证。",
+    "content": "深度求索（DeepSeek）今日宣布开源 DeepSeek-V4 系列模型。V4 在前代基础上实现多项重大升级：\n\n1. 上下文窗口从 64K 扩展至 128K，长文档处理能力大幅提升\n2. 原生支持 Tool Calling / Function Calling，无需额外微调\n3. 推理速度提升 2.5 倍，得益于新的 FlashMoE 推理引擎\n4. 在 MMLU-Pro、GPQA 等高难度基准上超越 GPT-4o\n\n模型权重已在 Hugging Face 发布，采用 Apache 2.0 许可证。配套的 DeepSeek Platform API 同步上线，免费额度为每天 500 万 token。",
+    "category": "开源项目",
+    "tags": ["DeepSeek", "开源", "大模型", "Tool Calling"]
   },
   {
     "id": "news-20260614-001",
@@ -36,11 +127,16 @@
     "summary": "国务院办公厅正式印发新一轮 AI 产业发展行动计划，提出到 2028 年培育 50 家百亿级 AI 企业。",
     "content": "新华社北京 6 月 14 日电 国务院办公厅近日印发《人工智能产业高质量发展行动计划（2026—2028 年）》。\n\n行动计划提出主要目标：到 2028 年，人工智能核心产业规模超过 8000 亿元，培育 50 家以上年营收超百亿元的 AI 企业，建成 20 个以上国家级人工智能创新应用先导区。\n\n行动计划从算力基建、模型研发、数据要素、应用落地、人才培养和安全治理六大方面部署了 22 项重点任务。其中特别强调要在医疗、教育、制造、农业等领域打造一批标杆应用场景。",
     "category": "政策动态",
-    "tags": [
-      "政策",
-      "国务院",
-      "AI产业",
-      "行动计划"
-    ]
+    "tags": ["政策", "国务院", "AI产业", "行动计划"]
+  },
+  {
+    "id": "news-20260614-hb01",
+    "title": "hanyo-design 在线 AI 设计工具完成 5000 万美元 B 轮融资",
+    "author": "36氪",
+    "date": "2026-06-14",
+    "summary": "国产 AI 设计工具 hanyo-design 完成 5000 万美元 B 轮融资，用户突破 200 万。",
+    "content": "36氪获悉，AI 设计工具 hanyo-design 近日完成 5000 万美元 B 轮融资，由高瓴资本领投，红杉中国跟投。\n\nhanyo-design 是一款在线 AI 辅助图形设计工具，支持用自然语言描述生成 UI 设计稿、营销素材和品牌视觉。创始人表示，产品月活已突破 200 万，付费转化率达到 12%。\n\n本轮融资将主要用于多模态模型的自研训练和海外市场拓展。公司计划年底前推出面向企业的团队协作版本。",
+    "category": "行业观察",
+    "tags": ["融资", "AI设计", "创业", "B轮"]
   }
 ]
