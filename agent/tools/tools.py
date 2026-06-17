@@ -13,8 +13,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-# 项目根目录（website 所在位置）
-PROJECT_ROOT = Path(__file__).parent.parent / "website"
+# 项目根目录（agent/tools/tools.py → 上两级到 agent/ → 再上一级到项目根）
+PROJECT_ROOT = Path(__file__).parent.parent.parent / "website"
 NEWS_DATA_FILE = PROJECT_ROOT / "data" / "news.json"
 
 

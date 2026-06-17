@@ -1,0 +1,23 @@
+{
+  "name": "dragon-news-publisher",
+  "version": "1.0.0",
+  "description": "龙虾新闻自动化发布技能。接收新闻稿纯文本，自动完成结构化解析、数据写入和Git推送，实现网站静默更新。",
+  "author": "luoluo",
+  "metadata": {
+    "openclaw": {
+      "primaryEnv": null,
+      "requires": {
+        "env": [],
+        "tools": ["mcp"]
+      }
+    }
+  },
+  "triggers": ["发布新闻", "发新闻", "新闻发布", "publish news"],
+  "tools": {
+    "mcp": {
+      "command": "python3",
+      "args": ["agent/tools/mcp_server.py"],
+      "transport": "stdio"
+    }
+  }
+}
