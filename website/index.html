@@ -443,6 +443,8 @@
             line-height: 1.5;
         }
 
+        .news-title-link:hover { color: var(--accent) !important; }
+
         .news-summary {
             font-size: 0.85rem;
             color: var(--text-secondary);
@@ -718,18 +720,6 @@
                 </div>
             </div>
 
-            <div class="panel-section">
-                <div class="panel-title">📡 数据来源</div>
-                <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.8;">
-                    <div>内容来自</div>
-                    <a href="https://aihot.virxact.com" target="_blank" style="color: var(--accent); font-weight: 600; text-decoration: none;">
-                        AI HOT ↗
-                    </a>
-                    <div style="margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-muted);">
-                        每日自动同步<br>中文 AI 资讯精选
-                    </div>
-                </div>
-            </div>
 
         </aside>
     </div>
@@ -818,12 +808,21 @@
             }
         }
 
+        function extractSourceUrl(content) {
+            const match = content.match(/原文链接[：:]\s*(https?:\/\/\S+)/);
+            return match ? match[1] : null;
+        }
+
+        function cleanContent(content) {
+            return content.replace(/原文链接[：:]\s*https?:\/\/\S+\s*/g, '').trim();
+        }
+
         function renderTimeline(news) {
             if (!news.length) {
                 document.getElementById('timeline').innerHTML = `
                     <div class="empty-state">
                         <div class="icon">📭</div>
-                        <p>暂无新闻，等待 Agent 发布...</p>
+                        <p>暂无新闻，等待同步...</p>
                     </div>`;
                 return;
             }
@@ -845,7 +844,11 @@
                 html += `<div class="timeline-date">${label}</div>`;
                 items.forEach(item => {
                     const time = item.date === today ? new Date().toTimeString().slice(0, 5) : '09:00';
-                    const contentPreview = item.content.replace(/\n/g, '<br>');
+                    const sourceUrl = extractSourceUrl(item.content);
+                    const cleanedContent = cleanContent(item.content).replace(/\n/g, '<br>');
+                    const titleHtml = sourceUrl
+                        ? `<a href="${sourceUrl}" target="_blank" rel="noopener" style="color: inherit; text-decoration: none;" class="news-title-link">${item.title} <span style="font-size:0.7rem;color:var(--text-muted);">🔗</span></a>`
+                        : item.title;
                     html += `
                         <article class="news-item" data-id="${item.id}">
                             <div class="news-item-header">
@@ -853,12 +856,12 @@
                                 <span class="news-source">${item.author}</span>
                                 <span class="news-category-badge">${item.category}</span>
                             </div>
-                            <h3 class="news-title">${item.title}</h3>
+                            <h3 class="news-title">${titleHtml}</h3>
                             <p class="news-summary">${item.summary}</p>
-                            <div class="news-content-preview">${contentPreview}</div>
+                            <div class="news-content-preview">${cleanedContent}</div>
                             <div class="news-footer">
                                 ${item.tags.map(t => `<span class="news-tag">#${t}</span>`).join('')}
-                                <button class="news-expand" onclick="toggleExpand(this)">展开全文</button>
+                                ${sourceUrl ? `<a href="${sourceUrl}" target="_blank" rel="noopener" style="font-size:0.7rem;color:var(--accent);text-decoration:none;margin-left:auto;">原文 ↗</a>` : ''}
                             </div>
                         </article>
                     `;
