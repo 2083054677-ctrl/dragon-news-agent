@@ -746,11 +746,6 @@
                         <span>研究论文</span>
                         <span class="count" id="count-paper">0</span>
                     </div>
-                    <div class="nav-item" data-filter="开源项目">
-                        <span class="nav-icon">💻</span>
-                        <span>开源项目</span>
-                        <span class="count" id="count-oss">0</span>
-                    </div>
                 </div>
 
                 <div class="nav-section">
@@ -871,7 +866,7 @@
 
         function updateCounts() {
             document.getElementById('count-all').textContent = allNews.length;
-            const countMap = { 'AI 前沿': 'count-ai', '政策动态': 'count-policy', '产品发布': 'count-product', '行业观察': 'count-industry', '研究论文': 'count-paper', '开源项目': 'count-oss' };
+            const countMap = { 'AI 前沿': 'count-ai', '政策动态': 'count-policy', '产品发布': 'count-product', '行业观察': 'count-industry', '研究论文': 'count-paper' };
             Object.entries(countMap).forEach(([cat, id]) => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = allNews.filter(n => n.category === cat).length;
