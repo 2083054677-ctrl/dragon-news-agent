@@ -3,7 +3,7 @@
 ## 项目名称
 基于大模型 Agent（龙虾）的网站自动化发布与更新系统
 
-## 当前状态：80% 完成
+## 当前状态：95% 完成
 
 ---
 
@@ -42,6 +42,7 @@
 
 ### 8. Git 历史 ✅
 ```
+5abb20e feat: 扩充新闻数据到74条，覆盖5月15日-6月17日
 0da82f8 feat: 重构 UI 为 AI HOT 风格 + 添加 RSS 采集器
 b900e17 feat: 添加端到端演示脚本
 9b1be51 publish: Anthropic 发布 Claude 4 系列模型
@@ -49,23 +50,29 @@ b3e3452 feat: 完成全部工程文件
 f25010a init: 龙虾新闻 Agent 自动化发布系统
 ```
 
+### 9. GitHub 仓库 ✅
+- 已创建并推送: https://github.com/2083054677-ctrl/dragon-news-agent
+- main 分支已设置 upstream
+
+### 10. OpenClaw Skill 注册 ✅
+- Skill 已安装到 ~/.openclaw/workspace/skills/dragon-news-publisher/
+- MCP 服务器已注册为 SSE 模式 (dragon-news-tools, port 7700)
+- 状态: ready ✅，端到端测试通过
+
 ---
 
 ## 未完成
 
-### 1. 新闻数据量不足 ❌
-- 当前 `website/data/news.json` 只有 14 条新闻（6月14-17日）
-- **需要补充**：扩充到约 30 天的数据（5月中旬到6月中旬），每天 2-3 条，总计约 60-80 条
-- 新闻内容目前是基于真实公司/事件虚构的（HN 的几条标题是真的）
-- 分类要均匀覆盖：AI 前沿、政策动态、产品发布、行业观察、研究论文、开源项目
+### 1. MCP 服务器需手动启动 ⚠️ (待优化)
+- SSE MCP 服务器 (`mcp_server_sse.py`) 需要手动在后台运行，端口 7700
+- 当前启动命令: `python3 agent/tools/mcp_server_sse.py 7700 &`
+- 已注册到 OpenClaw: `openclaw mcp set dragon-news-tools '{"url":"http://127.0.0.1:7700/sse","transport":"sse"}'`
+- 可考虑添加 launchd 或 systemd 服务实现自动启动
 
-### 2. 未推送到 GitHub ❌
-- 本地 Git 仓库已建好，但没有 remote
-- 需要创建 GitHub 仓库并 push
-
-### 3. OpenClaw 实际对接未测试 ❌
-- 配置文件都写好了，但没有实际在 OpenClaw 中运行过
-- 需要在 OpenClaw 中导入 skill 并测试完整对话流程
+### 2. OpenClaw 对话流程完整测试 ⚠️ (需手动验证)
+- Skill 已安装，MCP 已注册，但未在 OpenClaw 对话中实际触发
+- 验证方法: 在 OpenClaw 中输入「发新闻」触发词，发送一篇测试新闻稿
+- 确保 Agent 能正确解析、调用 MCP 工具、完成发布流程
 
 ---
 
@@ -76,7 +83,8 @@ f25010a init: 龙虾新闻 Agent 自动化发布系统
 ├── website/index.html          # 网站主页
 ├── website/data/news.json      # 新闻数据（唯一修改点）
 ├── agent/tools/tools.py        # 核心工具
-├── agent/tools/mcp_server.py   # MCP 服务
+├── agent/tools/mcp_server.py   # MCP 服务 (stdio)
+├── agent/tools/mcp_server_sse.py  # MCP 服务 (SSE, 兼容 OpenClaw)
 ├── agent/config/system-prompt.md  # System Prompt
 ├── agent/config/workflow.json  # 工作流
 ├── demo.py                     # 演示脚本
@@ -93,6 +101,6 @@ f25010a init: 龙虾新闻 Agent 自动化发布系统
 - Git 仓库已初始化，无 remote
 
 ## 下一步建议
-1. 先补充 news.json 到一个月的量（这是上次卡住的地方）
-2. 创建 GitHub 仓库并 push
-3. 在 OpenClaw 里实际跑一次完整流程
+1. 在 OpenClaw 对话中实际触发一次完整发布流程（输入「发新闻」+ 新闻稿文本）
+2. 配置 MCP 服务器开机自启（launchd plist）
+3. 可选：接入真实 RSS 源，实现每日自动采集发布
