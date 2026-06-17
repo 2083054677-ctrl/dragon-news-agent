@@ -185,35 +185,151 @@
             margin-top: 0.25rem;
         }
 
-        /* 今日热点 */
+        /* ═══ 今日热点 — 置顶排行榜 ═══ */
         .hot-section {
-            background: var(--content-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #fff5f5 0%, #fff9f0 40%, #ffffff 100%);
+            border: 1px solid #fecaca;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 2px 16px rgba(239, 68, 68, 0.06);
         }
 
         .hot-header {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.85rem;
-            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
             color: var(--hot);
+            letter-spacing: 0.3px;
         }
 
+        .hot-header .hot-icon { font-size: 1.1rem; }
+
+        .hot-header .hot-label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hot-header .hot-count {
+            margin-left: auto;
+            font-size: 0.65rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: #fff;
+            border: 1px solid #fecaca;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        /* Top 3 卡片网格 */
+        .hot-top3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .hot-card {
+            background: #fff;
+            border: 1px solid #fde8e8;
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hot-card:hover {
+            border-color: #fca5a5;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .hot-card:nth-child(1) {
+            border-color: #fbbf24;
+            background: linear-gradient(180deg, #fffbeb 0%, #fff 60%);
+        }
+
+        .hot-card:nth-child(2) {
+            border-color: #cbd5e1;
+            background: linear-gradient(180deg, #f8fafc 0%, #fff 60%);
+        }
+
+        .hot-card:nth-child(3) {
+            border-color: #d6b89e;
+            background: linear-gradient(180deg, #fdf6f0 0%, #fff 60%);
+        }
+
+        .hot-card-rank {
+            font-size: 0.65rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        .hot-card:nth-child(1) .hot-card-rank {
+            background: #fef3c7;
+            color: #b45309;
+        }
+
+        .hot-card:nth-child(2) .hot-card-rank {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .hot-card:nth-child(3) .hot-card-rank {
+            background: #fce7d5;
+            color: #9a4d2e;
+        }
+
+        .hot-card-title {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+            margin-bottom: 0.35rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hot-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+        }
+
+        .hot-card-cat {
+            font-size: 0.6rem;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        /* 第4-8名列表 */
         .hot-list {
             list-style: none;
+            border-top: 1px solid #fde8e8;
+            padding-top: 0.6rem;
         }
 
         .hot-list li {
             display: flex;
             align-items: baseline;
             gap: 0.6rem;
-            padding: 0.35rem 0;
-            font-size: 0.85rem;
+            padding: 0.3rem 0;
+            font-size: 0.8rem;
             color: var(--text);
             cursor: pointer;
             transition: color 0.15s;
@@ -222,15 +338,34 @@
         .hot-list li:hover { color: var(--accent); }
 
         .hot-list .hot-rank {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 700;
             color: var(--text-muted);
-            min-width: 16px;
+            min-width: 18px;
+            text-align: center;
         }
 
-        .hot-list li:nth-child(1) .hot-rank,
-        .hot-list li:nth-child(2) .hot-rank,
-        .hot-list li:nth-child(3) .hot-rank { color: var(--hot); }
+        .hot-list .hot-cat {
+            font-size: 0.6rem;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 0.05rem 0.35rem;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .hot-list .hot-source {
+            margin-left: auto;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .hot-top3 {
+                grid-template-columns: 1fr;
+            }
+        }
 
         .hot-list .hot-source {
             margin-left: auto;
@@ -539,11 +674,14 @@
                 <p class="page-subtitle" id="page-subtitle">AI 领域最新资讯，由 Agent 自动采集发布</p>
             </div>
 
-            <!-- 今日热点 -->
+            <!-- 今日热点排行榜 -->
             <div class="hot-section" id="hot-section">
                 <div class="hot-header">
-                    <span>🔥</span> 今日热点
+                    <span class="hot-icon">🔥</span>
+                    <span class="hot-label">今日热搜排行榜</span>
+                    <span class="hot-count" id="hot-count">TOP 8</span>
                 </div>
+                <div class="hot-top3" id="hot-top3"></div>
                 <ol class="hot-list" id="hot-list"></ol>
             </div>
 
@@ -653,14 +791,45 @@
         }
 
         function renderHot() {
-            const hot = allNews.slice(0, 5);
-            document.getElementById('hot-list').innerHTML = hot.map((item, i) => `
-                <li>
-                    <span class="hot-rank">${i + 1}</span>
+            const today = new Date().toISOString().slice(0, 10);
+            const todayNews = allNews.filter(n => n.date === today);
+            const hot = todayNews.length >= 8 ? todayNews.slice(0, 8) : allNews.slice(0, 8);
+            document.getElementById('hot-count').textContent = `TOP ${hot.length}`;
+
+            // Top 3 as cards
+            const top3 = hot.slice(0, 3);
+            document.getElementById('hot-top3').innerHTML = top3.map((item, i) => `
+                <div class="hot-card" onclick="scrollToNews('${item.id}')">
+                    <span class="hot-card-rank">🥇 ${i === 0 ? 'TOP 1' : i === 1 ? 'TOP 2' : 'TOP 3'}</span>
+                    <div class="hot-card-title">${item.title}</div>
+                    <div class="hot-card-meta">
+                        <span class="hot-card-cat">${item.category}</span>
+                        <span>${item.author.slice(0, 8)}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Remaining as list
+            const rest = hot.slice(3);
+            document.getElementById('hot-list').innerHTML = rest.map((item, i) => `
+                <li onclick="scrollToNews('${item.id}')">
+                    <span class="hot-rank">${i + 4}</span>
+                    <span class="hot-cat">${item.category.slice(0,2)}</span>
                     <span>${item.title}</span>
                     <span class="hot-source">${item.author.slice(0, 6)}</span>
                 </li>
             `).join('');
+        }
+
+        function scrollToNews(id) {
+            const el = document.querySelector(`[data-id="${id}"]`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('expanded');
+                // Flash highlight
+                el.style.boxShadow = '0 0 0 3px #fbbf24';
+                setTimeout(() => { el.style.boxShadow = ''; }, 1500);
+            }
         }
 
         function renderTimeline(news) {
