@@ -718,10 +718,6 @@
                         <span class="nav-icon">📰</span>
                         <span>日报</span>
                     </div>
-                    <div class="nav-item" data-filter="全部">
-                        <span class="nav-icon">📰</span>
-                        <span>全部动态</span>
-                    </div>
                 </div>
 
                 <div class="nav-section">
@@ -1088,9 +1084,9 @@
                 const filter = item.dataset.filter;
                 currentFilter = filter;
 
-                if (filter === 'all' || filter === '全部') {
+                if (filter === 'all') {
                     renderTimeline(allNews);
-                    document.getElementById('page-title').textContent = filter === 'all' ? '精选' : '全部动态';
+                    document.getElementById('page-title').textContent = '精选';
                 } else {
                     const filtered = allNews.filter(n => n.category === filter);
                     renderTimeline(filtered);
